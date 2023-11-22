@@ -38,13 +38,14 @@ app.get("/", (req, res) => {
 
 app.post("/decodeUplink", (req, res) => {
     console.log("Datos recibidos");
+    console.log(req);
     const body = req.body;
 
     let data;
     if (body.data !== undefined && body.data != null) {
         data = decodeUplink(body.data);
     }
-    
+
     console.log("Data: ", data)
     res.status(200).send(data);
 });
