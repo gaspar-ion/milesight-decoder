@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const axios = require("axios");
+const multer = require('multer');
 // const fs = require('fs');
 
 const PORT = 3000;
@@ -31,18 +32,22 @@ app.use(
     })
 );
 
+// Configura Multer para manejar form-data
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 // ============ ROUTES ===========
 app.get("/", (req, res) => {
     res.status(200).send({ "message": "Route working" });
 });
 
-app.post("/decodeUplink", (req, res) => {
+app.post("/decodeUplink", upload.single('archivo'), (req, res) => {
     console.log("Datos recibidos");
-    console.log(req);
     const body = req.body;
 
     let data;
     if (body.data !== undefined && body.data != null) {
+        console.log(body.data);
         data = decodeUplink(body.data);
     }
 
