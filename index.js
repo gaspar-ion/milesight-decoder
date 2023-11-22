@@ -59,8 +59,8 @@ app.listen(PORT, HOST, () => {
     console.log("Listening on *:" + PORT);
 });
 
-const httpServer = http.createServer(app);
-httpServer.listen(PORT);
+// const httpServer = http.createServer(app);
+// httpServer.listen(PORT);
 
 function hexStringToByteArray(hexString) {
     var byteArray = [];
