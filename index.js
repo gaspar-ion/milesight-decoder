@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/decodeUplink", upload.single('archivo'), (req, res) => {
-    console.log("Datos recibidos");
+    console.log("Datos recibidos en /decodeUplink");
     const body = req.body;
 
     let data, sensorData;
@@ -51,22 +51,34 @@ app.post("/decodeUplink", upload.single('archivo'), (req, res) => {
         sensorData = SensorDataDecoder(body.data);
     }
 
-    console.log("Data: ", {data, sensorData})
+    console.log("Data: ", {data})
     res.status(200).send({ data, sensorData });
 });
 
 app.post("/decodeEM310", upload.single('archivoEM310'), (req, res) => {
-    console.log("Datos recibidos");
+    console.log("Datos recibidos en /decodeEM310");
     const body = req.body;
 
     let data, sensorData;
     if (body.data !== undefined && body.data != null) {
         data = DecodeEM310(null, body.data);
+    }
+
+    console.log("Data: ", { data })
+    res.status(200).send({ data, sensorData });
+});
+
+app.post("/decodeKeepAlive", upload.single('archivoKeepAlive'), (req, res) => {
+    console.log("Datos recibidos en /decodeKeepAlive");
+    const body = req.body;
+
+    let sensorData;
+    if (body.data !== undefined && body.data != null) {
         sensorData = SensorDataDecoder(body.data);
     }
 
-    console.log("Data: ", { data, sensorData })
-    res.status(200).send({ data, sensorData });
+    console.log("Data: ", { sensorData });
+    res.status(200).send({ sensorData });
 });
 
 app.get("/check", (req, res) => {
@@ -299,6 +311,8 @@ function milesight(bytes) {
 }
 
 let deviceData = {};
+
+// https://docs.mclimate.eu/mclimate-lorawan-devices/devices/mclimate-vicki-lorawan/vicki-uplink-decoder#recommended-decoder-javascript-es6
 function SensorDataDecoder(hexData) {
     const toBool = value => value == '1';
     let decbin = (number) => {
